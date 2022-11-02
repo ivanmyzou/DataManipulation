@@ -1,0 +1,79 @@
+---
+title: "II Data Reshaping"
+author: ""
+date: ""
+output: pdf_document
+---
+
+```{r}
+suppressWarnings(library(tidyverse))
+suppressWarnings(library(data.table))
+```
+
+## From Long to Wide
+
+Convert all unique levels in a column (`names_from`) into new columns;
+
+Fill rows under those columns with values from other columns (`values_from`).
+
+```{r}
+d <- us_rent_income[c("GEOID", "NAME", "variable", "estimate")]
+d %>% head
+```
+
+```{r}
+d %>%
+  pivot_wider(
+    names_from = variable, #new columns
+    values_from = estimate #values
+  ) %>% head
+```
+
+```{r}
+d <- us_rent_income
+d %>% head
+```
+
+```{r}
+d %>%
+  pivot_wider(
+    names_from = variable, #new columns
+    values_from = c(estimate, moe) #values
+  ) %>% head
+```
+
+```{r}
+d %>%
+  pivot_wider(
+    names_from = variable, #new columns
+    values_from = estimate #values
+  ) %>% head
+```
+
+```{r}
+d %>%
+  pivot_wider(
+    names_from = variable,
+    values_from = c(estimate, moe),
+    names_vary = "slowest" #different column ordering
+  ) %>% head
+```
+
+## From Wide to Long
+
+Convert columns (`cols`) into levels of a new column (`names_to`);
+
+Create a new column (`values_to`) to store values under those columns (`cols`).
+
+```{r}
+d <- relig_income
+d %>% head
+```
+```{r}
+d %>%
+  pivot_longer(!religion, #cols, columns to be converted into levels
+               names_to = "income", #new column to store current column names
+               values_to = "count" #new column to store current column values
+               ) %>% head
+```
+
